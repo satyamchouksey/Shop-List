@@ -1,23 +1,43 @@
 import logo from './logo.svg';
 import './App.css';
+import React, {useState,useEffect} from 'react';
 
 function App() {
+  const [item, setitem] = useState('');
+  const [itemList, setitemList] = useState([]);
+  const handleAddItem = () => {
+    setitemList(prev => [...prev, item]);
+  }
+  const handleDelete = (index) => {
+    let tempList = itemList;
+    tempList.splice(index, 1);
+    console.log(itemList)
+    setitemList([...tempList]);
+  }
+  const displayList = () => {
+      return (itemList.map((item, index) => {
+        return (
+          <div key={index} className="list">
+            <span>{index}</span>
+            <span>{item}</span>
+            <div className="list-buttons">
+              <span>Modify</span>
+              <span onClick={() => handleDelete(index)}>Delete</span>
+            </div>
+          </div>
+        );
+      }))
+    }
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="inputBar">
+        <input placeholder="bread.." value={item} onChange={(event) => setitem(event.target.value)} />
+        <button onClick={handleAddItem}>Add</button>
+      </div>
+      <div className="table">
+        {displayList()}
+      </div>
     </div>
   );
 }
